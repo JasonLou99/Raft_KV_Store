@@ -203,7 +203,7 @@ func Request(cnum int, num int, servers []string) {
         }
 }
 
-func RequestRation(cnum int, num int, servers []string, getRation int) {
+func RequestRatio(cnum int, num int, servers []string, getRatio int) {
         fmt.Println("servers: ", servers)
         ck := Clerk{
                 servers:     make([]string, len(servers)),
@@ -220,7 +220,7 @@ func RequestRation(cnum int, num int, servers []string, getRation int) {
                 atomic.AddInt32(&putCount, 1)
                 atomic.AddInt32(&count, 1)
 
-                for j := 0; j < getRation; j++ {
+                for j := 0; j < getRatio; j++ {
                         // 读操作
                         k := "key" + strconv.Itoa(key)
                         v := ck.Get(k)
@@ -246,13 +246,13 @@ func main() {
         var mode = flag.String("mode", "read", "Read or Put and so on")
         var cnums = flag.String("cnums", "1", "Client Threads Number")
         var onums = flag.String("onums", "1", "Client Requests times")
-        var getration = flag.String("getration", "1", "Get Times per Put Times")
+        var getratio = flag.String("getratio", "1", "Get Times per Put Times")
         // 将命令行参数解析
         flag.Parse()
         servers := strings.Split(*ser, ",")
         clientNumm, _ := strconv.Atoi(*cnums)
         optionNumm, _ := strconv.Atoi(*onums)
-        getRation, _ := strconv.Atoi(*getration)
+        getRatio, _ := strconv.Atoi(*getratio)
 
         if clientNumm == 0 {
                 fmt.Println("### Don't forget input -cnum's value ! ###")
@@ -264,9 +264,9 @@ func main() {
         }
 
         // 总请求次数Times = clientNumm * optionNumm
-        if *mode == "RequestRation" {
+        if *mode == "RequestRatio" {
                 for i := 0; i < clientNumm; i++ {
-                        go RequestRation(clientNumm, optionNumm, servers, getRation)
+                        go RequestRatio(clientNumm, optionNumm, servers, getRatio)
                 }
         } else if *mode == "Request" {
                 for i := 0; i < clientNumm; i++ {
